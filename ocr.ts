@@ -8,6 +8,7 @@ interface Item {
   id: string;
   name: string;
   is_food: boolean;
+  kg: number;
   score?: number;
 }
 
@@ -48,7 +49,7 @@ export async function processImage(imageBase64: string): Promise<any> {
 		    "content": [
 			{
 			    "type": "text",
-			    "text": "Analyze the provided receipt to extract the items purchased, do NOT output code. Output a JSON array with the following format: {\"items\": [{\"id\": <item read from receipt>, \"name\": <your best guess as to the common name of the product>, \"is_food\": <bool, whether or not the product is a food product or not>}, ...]}. If you can't parse any of the lines on the receipt, don't add anything. do NOT output anything other than the JSON ARRAY. Exclude any other receipt info (headers, footers, cost, etc). USE DOUBLE QUOTES NOT SINGLE QUOTES to delimitate strings. The ID should be the item name listed on the receipt, NOT the item ID integer. \n\nExample output: {\"items\": [{\"id\": \"CHKCN-NGT\", \"name\": \"Chicken Nuggets\", \"is_food\": true}]}"
+			    "text": "Analyze the provided receipt to extract the items purchased, do NOT output code. Output a JSON array with the following format: {\"items\": [{\"id\": <item read from receipt>, \"name\": <your best guess as to the common name of the product>, \"kg\": <average weight of object in kg>, \"is_food\": <bool, whether or not the product is a food product or not>}, ...]}. If you can't parse any of the lines on the receipt, don't add anything. do NOT output anything other than the JSON ARRAY. Exclude any other receipt info (headers, footers, cost, etc). USE DOUBLE QUOTES NOT SINGLE QUOTES to delimitate strings. The ID should be the item name listed on the receipt, NOT the item ID integer. \n\nExample output: {\"items\": [{\"id\": \"CHKCN-NGT\", \"name\": \"Chicken Nuggets\", \"kg\": 2.10, \"is_food\": true}]}"
 			},
 			{
 			    "type": "image_url",
