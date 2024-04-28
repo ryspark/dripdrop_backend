@@ -64,7 +64,7 @@ export async function processImage(imageBase64: string): Promise<any> {
 
     const visionResponse = await axios.post('https://api.openai.com/v1/chat/completions', payload, {
       headers: {
-        'Authorization': `Bearer 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`,
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
       }
     });
