@@ -1,5 +1,5 @@
 import { Builder, By, until, WebDriver, WebElement } from 'selenium-webdriver';
-import chrome, { Options } from 'selenium-webdriver/chrome';
+import chrome, { Options, ServiceBuilder } from 'selenium-webdriver/chrome';
 
 // Define the function to extract floating-point numbers from a string
 function extractFloat(inputString: string): number | null {
@@ -9,16 +9,30 @@ function extractFloat(inputString: string): number | null {
 
 export async function startCrawler(query: string, is_food: boolean): Promise<any> {
     let options = new Options();
-    options.addArguments('--headless', '--disable-gpu', '--window-size=1920,1080');
+    if (process.env.GOOGLE_CHROME_BIN) {
+        options.setChromeBinaryPath(process.env.GOOGLE_CHROME_BIN);
+    }
+
+    options.addArguments('--headless', '--disable-gpu', '--window-size=1920,1080', '--no-sandbox', '--disable-dev-shm-usage');
+
 
     if (!is_food) {
         return null;
     }
 
-    let driver = await new Builder()
-        .forBrowser('chrome')
-        .setChromeOptions(options)
-        .build();
+    let driver = null;
+    if (process.env.CHROMEDRIVER_PATH) {
+  	driver = new Builder()
+		.forBrowser('chrome')
+		.setChromeService(new ServiceBuilder(process.env.CHROMEDRIVER_PATH))
+		.setChromeOptions(options)
+		.build();
+	} else {
+	    driver = await new Builder()
+		.forBrowser('chrome')
+		.setChromeOptions(options)
+		.build();
+	}
 
     try {
         const encodedQuery = encodeURIComponent(query);
